@@ -5,21 +5,21 @@
 */
 #include <Adafruit_NeoPixel.h>
 #include "Display.h"
+#include "options.h" 
 
 
-const int DisplayPin = 6;
-const int numbersOfDigits = 4;
-Display display =Display(DisplayPin, numbersOfDigits);
+Display display =Display();
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-	Serial.begin(9600);
+	Serial.begin(57600);
 	display.printStatus();
 	display.init();
+  
 	
-	//display.show(8888, 50, 50, 100);
+	display.show(1234, 50, 50, 50);
 	
-//	display.showFlag(1);
+  //	display.showFlag(1);
 	//display.clear();
 	//display.show(3, 0, 255, 165, 0);
 	//display.show(2, 0, 50, 50, 50);
@@ -32,6 +32,10 @@ void setup() {
 // the loop function runs over and over again until power down or reset
 void loop() {
 	//display.show(8888, 50, 50, 50);
+  delay(1000);
+  display.show(1111, 50, 50, 50);
+   delay(1000);
+  display.show(1234, 50, 50, 50);
 	/*delay(3000);*/
 //Serial.println(display.debugvalue(0));
 //	Serial.println(display.debugvalue(1));
@@ -47,7 +51,7 @@ void loop() {
 		delay(500);
 	}*/
 
-	display.show(1,0,0,100);
+/*	display.show(1,0,0,100);
 	delay(2000);
 	display.show(12, 0, 0, 100);
 	delay(2000);
@@ -58,6 +62,6 @@ void loop() {
 	display.show(2345, 0, 0, 100);
 	delay(2000);
 	display.show(2016, 0, 0, 100);
-	delay(5000);
+	delay(5000);*/
 	
 }
