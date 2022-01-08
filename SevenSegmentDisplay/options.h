@@ -1,5 +1,3 @@
 #pragma once
 
-#define DISPLAYPIN  8   
-#define DIGITS  4
-#define LEDS_PER_SEGMENT  1
+#define MAX_LEDS_PER_SEGMENT  2  // used for initializing arrays, don't set it higher than necessary

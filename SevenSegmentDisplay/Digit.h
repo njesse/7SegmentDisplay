@@ -7,21 +7,21 @@
 class Digit
 {
 public:
-	Digit(int offset);
 	Digit();
 	~Digit();
-	const int numberOfLEDs = LEDS_PER_SEGMENT *7;
+	int numberOfLEDs;  // The number of LEDs is the sum over all the LEDs in the digit.
 	void setValue(int value, uint16_t r, uint16_t g, uint16_t b);
 	void setValue(int value);
 	int getOffset();
-	void init(int offset);
+	void init(int offset, int numberOfLedsPerSegment);
 	LED getLED(int number);
 	void showFlag(int i);
 
   
 private:
 	int m_StartValue;
-	LED leds[LEDS_PER_SEGMENT * 7];
+  int m_LedsPerSegment;
+	LED leds[MAX_LEDS_PER_SEGMENT * 7];
 	void turnOn(int segment);
  void setColor(int segment,uint16_t r, uint16_t g, uint16_t b);
 
@@ -33,4 +33,3 @@ private:
   const char Bottom =5;
   const char BottomLeft =6;
 };
-

@@ -1,26 +1,22 @@
 #include "Digit.h"
-
+/*
+ * A digit is any one of the numbers 0 to 9.
+ * Here, 7 groups of LEDS are one segment. 
+ * The numbuer of LEDs is the sum over all the LEDs in the digit.
+ * In the whole display, each LED as a unique, integer value representing its position
+ * As the digit itself doesn't care, which postion it has in the whole display it passes startvalue and offset
+ * through to the LED Object.
+ */
 Digit::Digit()
 {
-
 }
 
-Digit::Digit(int startvalue)
-{
-  m_StartValue = startvalue;
-
-  for (int i = 0; i < numberOfLEDs; i++)
-  {
-    leds[i] = LED(m_StartValue + i);
-  }
-  
-}
-
-
-void Digit::init(int offset)
+void Digit::init(int offset, int numberOfLedsPerSegment)
 {
   m_StartValue = offset;
-
+  m_LedsPerSegment = numberOfLedsPerSegment;
+  numberOfLEDs = numberOfLedsPerSegment*7; 
+  
   for (int i = 0; i < numberOfLEDs; i++)
   {
     leds[i] = LED(m_StartValue + i);
@@ -37,7 +33,6 @@ void Digit::setValue(int value)
 {
   for (int i = 0; i < numberOfLEDs; i++)
   {
-
     leds[i].turnOff();
   }
   switch (value) {
@@ -310,8 +305,8 @@ void Digit::setValue(int value, uint16_t r, uint16_t g, uint16_t b)
 }
 
 void Digit::turnOn(int segment) {
-  int startValue = segment * LEDS_PER_SEGMENT;
-  int endValue = startValue + LEDS_PER_SEGMENT;
+  int startValue = segment * m_LedsPerSegment;
+  int endValue = startValue + m_LedsPerSegment;
   for (int i = startValue; i < endValue; i++)
   {
     leds[i].turnOn();
@@ -319,8 +314,8 @@ void Digit::turnOn(int segment) {
 }
 
 void Digit::setColor(int segment, uint16_t r, uint16_t g, uint16_t b) {
-  int startValue = segment * LEDS_PER_SEGMENT;
-  int endValue = startValue + LEDS_PER_SEGMENT;
+  int startValue = segment * m_LedsPerSegment;
+  int endValue = startValue + m_LedsPerSegment;
   for (int i = startValue; i < endValue; i++)
   {
     leds[i].setColor(r, g, b);

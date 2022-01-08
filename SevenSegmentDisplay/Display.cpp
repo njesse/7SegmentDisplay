@@ -2,22 +2,24 @@
 #include <Adafruit_NeoPixel.h>
 
 
-Display::Display()
-{
-
+Display::Display(int pin,  int LEDperSegment)
+{  
+  m_pin = pin;
+  m_LEDperSegment = LEDperSegment;
 }
 
 void Display::printStatus()
 {
-	Serial.print(F("Anzahl Stellen "));
-	Serial.println(m_NumberOfDigits);
+	Serial.print(F("Number of Digits: "));
+	Serial.println(DIGITS);
 
-	Serial.print(F("Pin "));
+	Serial.print(F("Pin used: "));
 	Serial.println(m_pin);
 }
 
 Display::~Display()
 {
+
 }
 
 void Display::showFlag(int color) {
@@ -57,9 +59,9 @@ int Display::debugvalue(int i)
 }
 void Display::init()
 {
-	int numberofLEDs = DIGITS * 7 * LEDS_PER_SEGMENT ;
+	int numberofLEDs = DIGITS * 7 * m_LEDperSegment ;
 
-	m_strip =  Adafruit_NeoPixel(numberofLEDs, DISPLAYPIN, NEO_GRB + NEO_KHZ800);
+	m_strip =  Adafruit_NeoPixel(numberofLEDs, m_pin, NEO_GRB + NEO_KHZ800);
 	m_strip.begin();
 
 
@@ -67,11 +69,17 @@ void Display::init()
 
 	clear();
 
-	digits[0].init(0);
-	digits[1].init(digits[0].numberOfLEDs + digits[0].getOffset());
-	digits[2].init(digits[1].numberOfLEDs + digits[1].getOffset());
-	digits[3].init(digits[2].numberOfLEDs + digits[2].getOffset());
 
+ 	digits[0].init(0,m_LEDperSegment);
+	digits[1].init(digits[0].numberOfLEDs + digits[0].getOffset(),m_LEDperSegment);
+	digits[2].init(digits[1].numberOfLEDs + digits[1].getOffset(),m_LEDperSegment);
+	digits[3].init(digits[2].numberOfLEDs + digits[2].getOffset(),m_LEDperSegment);
+
+ 
+ Serial.print(F("digits[0].numberOfLEDs: "));
+ Serial.println(digits[0].numberOfLEDs);
+Serial.print(F("digits[1].getOffset(): "));
+ Serial.println(digits[1].getOffset());
 }
 
 void Display::show(int digit, int number, int r, int g, int b) {
@@ -183,6 +191,7 @@ int Display::show(int number, int r, int g, int b)
 	{
 		ones= (number % 10) ;
 	}
+  Serial.println(F("ones:"));
 
 	digits[0].setValue(ones,r,g,b);
 	digits[1].setValue(tens,r,g,b);
@@ -198,13 +207,11 @@ int Display::show(int number, int r, int g, int b)
 
 void Display::ShowDigits()
 {
-	Serial.println(F("Show Digit="));
+	Serial.println(F("Show Digit:"));
 for (int i = 0; i < DIGITS; i++)
 {
   for (int j = 0; j < digits[0].numberOfLEDs; j++)
-		{
-			
-			
+		{		
 				m_strip.setPixelColor(digits[i].getLED(j).getPositon(), digits[i].getLED(j).r, digits[i].getLED(j).g, digits[i].getLED(j).b);
 				Serial.print(F("LED= "));
 				Serial.print(digits[i].getLED(j).getPositon());
@@ -226,5 +233,3 @@ void Display::clear()
 	m_strip.clear();
 	m_strip.show();
 }
-
-
